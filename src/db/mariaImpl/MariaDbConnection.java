@@ -1,4 +1,4 @@
-package db;
+package db.mariaImpl;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

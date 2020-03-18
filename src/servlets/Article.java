@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import db.ArticleDao;
+import db.mariaImpl.ArticleDaoMariaDb;
+
 /**
  * Servlet implementation class Article
  */
@@ -27,13 +30,11 @@ public class Article extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String name = request.getParameter("author");
-		String text = request.getParameter("text");
-		
-		beans.Article article = new beans.Article();
-		article.setName(name);
-		article.setText(text);
-		
+		String idString = request.getParameter("id");
+		int id = Integer.valueOf(idString);
+		ArticleDao articleDao = new ArticleDaoMariaDb();
+		beans.Article article = articleDao.findById(id);
+		//JSP print
 	}
 
 	/**

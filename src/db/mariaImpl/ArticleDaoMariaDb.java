@@ -1,10 +1,12 @@
-package db;
+package db.mariaImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import beans.Article;
+import db.ArticleDao;
 
 public class ArticleDaoMariaDb implements ArticleDao{
 	
@@ -54,13 +56,39 @@ public class ArticleDaoMariaDb implements ArticleDao{
 
 	@Override
 	public Article findById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Article article = null;
+		Connection con = mariaDbConn.open();
+		String sql = "SELECT * FROM article_art where art_id = ?";
+		try {
+			article = new Article();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				article.setName(rs.getString("art_name"));
+				article.setText(rs.getString("art_text"));
+				article.setImg(rs.getString("art_img"));
+				article.setVisitorCount(rs.getInt("visitor_count"));
+			}
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return article;
 	}
 
 	@Override
 	public void delete(Article article) {
-		// TODO Auto-generated method stub
+		Connection con = mariaDbConn.open();
+		String sql = "DELETE FROM article_art WHERE art_id = ?";
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, article.getId());
+			ps.execute();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
